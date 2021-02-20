@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import {
   fetchUsers,
@@ -12,6 +12,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import ModalWindow from "./../ModalWindow";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -38,9 +39,10 @@ const useStyles = makeStyles({
 });
 
 function UserTable(props) {
+  
   useEffect(() => {
     props.fetchUsers();
-  }, []);
+  }, [])
 
   const { users } = props;
   const rows = users.map((user) => {
@@ -52,32 +54,56 @@ function UserTable(props) {
       companyName: user.company.name,
     };
   });
+
+  const [open, setOpen] = React.useState(false);
+  
+
+  function clickHandler(id) {
+    handleClickOpen();
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const classes = useStyles();
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">Email</StyledTableCell>
-            <StyledTableCell align="right">Website</StyledTableCell>
-            <StyledTableCell align="right">Company</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.email}</StyledTableCell>
-              <StyledTableCell align="right">{row.website}</StyledTableCell>
-              <StyledTableCell align="right">{row.companyName}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Fragment>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="right">Email</StyledTableCell>
+              <StyledTableCell align="right">Website</StyledTableCell>
+              <StyledTableCell align="right">Company</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <StyledTableRow
+                onClick={clickHandler.bind(this, row.id)}
+                key={row.id}
+              >
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.email}</StyledTableCell>
+                <StyledTableCell align="right">{row.website}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {row.companyName}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <ModalWindow open={open} handleClose={handleClose} />
+    </Fragment>
   );
 }
 
