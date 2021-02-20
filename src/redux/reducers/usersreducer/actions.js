@@ -11,7 +11,7 @@ export function addUser(user){
     return {type:constatns.ADD_USER, payload:user}
 }
 
-export function deleteUser(id){
+export function deleteUserById(id){
     return {type:constatns.DELETE_USER, payload:id}
 }
 

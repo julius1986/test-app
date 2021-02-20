@@ -5,7 +5,7 @@ const initialState = [];
 export default function UsersReducer(state=initialState, action){
     switch (action.type) {
         case constatns.ADD_USER:
-            return [...state,action.payload]
+            return [...state, action.payload]
             break;
         case constatns.FETCH_USERS:
             return state = [...action.payload]
