@@ -1,5 +1,5 @@
 export function cloneObj(obj){
-    return JSON.stringify(JSON.parse(obj));
+    return JSON.parse(JSON.stringify(obj));
 }
 
 export function randomId(){
