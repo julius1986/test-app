@@ -118,6 +118,7 @@ export default function FormDialog(props) {
   function updateCurrentUser() {
     const valid = validForm();
     if(!valid){return false;}
+    userFields.isDirty = true;
     dispatch(updateUser(userFields));
     handleClose();
   }
