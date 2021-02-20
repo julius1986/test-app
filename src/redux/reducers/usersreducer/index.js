@@ -14,11 +14,12 @@ export default function UsersReducer(state=initialState, action){
             return state.filter(el => el.id!==action.payload)
             break;
         case constatns.UPDATE_USER:
-            let res = state.indexOf(action.payload.id)
-            if(res===-1){
+            let index = state.indexOf(action.payload.id)
+            if(index===-1){
                 return state;
             }
-            state[res] = action.payload;
+            state.splice(index, 1)
+            state.push(action.payload)
             return [...state]
             break;
         case constatns.ADD_USERS:

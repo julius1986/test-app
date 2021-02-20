@@ -43,11 +43,11 @@ export default function FormDialog(props) {
     dispatch(addUser(newUser));
     handleClose();
   }
-  function deleteUser() {
+  function deleteCurrentUser() {
       dispatch(deleteUserById(newUser.id));
       handleClose();
   }
-  function updateUser() {
+  function updateCurrentUser() {
         dispatch(updateUser(newUser));
         handleClose();
   }
@@ -80,10 +80,10 @@ export default function FormDialog(props) {
         <Button onClick={createNewUser} color="primary">
           Create
         </Button>
-        <Button onClick={updateUser} color="primary">
+        <Button onClick={updateCurrentUser} color="primary">
           Update
         </Button>
-        <Button onClick={deleteUser} color="primary">
+        <Button onClick={deleteCurrentUser} color="primary">
           Delete
         </Button>
       </DialogActions>
