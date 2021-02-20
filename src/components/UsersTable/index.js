@@ -1,9 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import {
-  fetchUsers,
-  deleteUser,
-} from "./../../redux/reducers/usersreducer/actions";
+import {  fetchUsers } from "./../../redux/reducers/usersreducer/actions";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -45,20 +42,22 @@ function UserTable(props) {
   }, [])
 
   const { users } = props;
-  const rows = users.map((user) => {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      website: user.website,
-      companyName: user.company.name,
-    };
-  });
+  const rows = users;
+  // .map((user) => {
+  //   return {
+  //     id: user.id,
+  //     name: user.name,
+  //     email: user.email,
+  //     website: user.website,
+  //     companyName: user.company.name,
+  //   };
+  // });
 
   const [open, setOpen] = React.useState(false);
-  
+  const [currentUser, setCurrentUser] = React.useState({});
 
-  function clickHandler(id) {
+  function clickHandler(user) {
+    setCurrentUser(user);
     handleClickOpen();
   }
 
@@ -67,6 +66,7 @@ function UserTable(props) {
   };
 
   const handleClose = () => {
+    setCurrentUser({});
     setOpen(false);
   };
 
@@ -86,7 +86,7 @@ function UserTable(props) {
           <TableBody>
             {rows.map((row) => (
               <StyledTableRow
-                onClick={clickHandler.bind(this, row.id)}
+                onClick={clickHandler.bind(this, row)}
                 key={row.id}
               >
                 <StyledTableCell component="th" scope="row">
@@ -95,14 +95,14 @@ function UserTable(props) {
                 <StyledTableCell align="right">{row.email}</StyledTableCell>
                 <StyledTableCell align="right">{row.website}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {row.companyName}
+                  {row.company.name}
                 </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <ModalWindow open={open} handleClose={handleClose} />
+      <ModalWindow user={currentUser} open={open} handleClose={handleClose} />
     </Fragment>
   );
 }
@@ -118,10 +118,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchUsers: () => {
       dispatch(fetchUsers());
-    },
-    deleteUser: (id) => {
-      dispatch(deleteUser(id));
-    },
+    }
   };
 }
 
