@@ -41,18 +41,7 @@ function UserTable(props) {
     props.fetchUsers();
   }, [])
 
-  const { users } = props;
-  const rows = users;
-  // .map((user) => {
-  //   return {
-  //     id: user.id,
-  //     name: user.name,
-  //     email: user.email,
-  //     website: user.website,
-  //     companyName: user.company.name,
-  //   };
-  // });
-
+  const rows = props.users;
   const [open, setOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
 
@@ -102,7 +91,7 @@ function UserTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <ModalWindow user={currentUser} open={open} handleClose={handleClose} />
+      {(open&&<ModalWindow user={currentUser} open={open} handleClose={handleClose} />)}
     </Fragment>
   );
 }

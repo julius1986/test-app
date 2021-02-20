@@ -14,7 +14,7 @@ export default function UsersReducer(state=initialState, action){
             return state.filter(el => el.id!==action.payload)
             break;
         case constatns.UPDATE_USER:
-            let index = state.indexOf(action.payload.id)
+            let index = state.findIndex((el)=>{return el.id===action.payload.id })
             if(index===-1){
                 return state;
             }
