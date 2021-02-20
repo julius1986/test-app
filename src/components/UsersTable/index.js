@@ -1,14 +1,17 @@
-import React, { useEffect  } from 'react'
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { fetchUsers, deleteUser } from "./../../redux/reducers/usersreducer/actions"
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import {
+  fetchUsers,
+  deleteUser,
+} from "./../../redux/reducers/usersreducer/actions";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -22,7 +25,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
   },
@@ -35,23 +38,23 @@ const useStyles = makeStyles({
 });
 
 function UserTable(props) {
-  useEffect (()=>{
+  useEffect(() => {
     props.fetchUsers();
-  },[])
+  }, []);
 
-    const {users} = props;
-    const rows = users.map(user=>{
-      return {
-        id:user.id,
-        name:user.name,
-        email:user.email,
-        website:user.website,
-        companyName:user.company.name,
-      }
-    })
-    const classes = useStyles();
-    return (
-      <TableContainer component={Paper}>
+  const { users } = props;
+  const rows = users.map((user) => {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      website: user.website,
+      companyName: user.company.name,
+    };
+  });
+  const classes = useStyles();
+  return (
+    <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -75,15 +78,14 @@ function UserTable(props) {
         </TableBody>
       </Table>
     </TableContainer>
-    )
-          
+  );
 }
 
-function stateToProps(state){
-  const {users} = state;
+function stateToProps(state) {
+  const { users } = state;
   return {
-    users
-  }
+    users,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -91,10 +93,10 @@ function mapDispatchToProps(dispatch) {
     fetchUsers: () => {
       dispatch(fetchUsers());
     },
-    deleteUser:(id) => {
-        dispatch(deleteUser(id));
-    }
+    deleteUser: (id) => {
+      dispatch(deleteUser(id));
+    },
   };
 }
 
-export default connect(stateToProps,mapDispatchToProps)(UserTable)
+export default connect(stateToProps, mapDispatchToProps)(UserTable);
