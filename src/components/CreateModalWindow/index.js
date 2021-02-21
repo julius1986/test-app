@@ -99,10 +99,10 @@ export default function FormDialog(props) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">CRUD</DialogTitle>
+        <DialogTitle id="form-dialog-title">Create user.</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Here you can create, update or delete user.
+            Do you want to create user?
           </DialogContentText>
 
           <TextField

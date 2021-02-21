@@ -125,7 +125,7 @@ export default function UserTable(props) {
           </TableHead>
           <TableBody>
             {filterUsers(rows, inputSearchValue).map((row) => (
-              <StyledTableRow key={row.id}>
+              <StyledTableRow key={row.id} className={row.isDirty&&"dirty"}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>

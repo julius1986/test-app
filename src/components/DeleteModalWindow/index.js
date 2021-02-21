@@ -23,7 +23,7 @@ export default function FormDialog(props) {
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">CRUD</DialogTitle>
+      <DialogTitle id="form-dialog-title">Delete user.</DialogTitle>
       <DialogContent>
         <DialogContentText>Do you want delete user?</DialogContentText>
       </DialogContent>

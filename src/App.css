@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.dirty > * {
+  font-family: Georgia !important;
+  /* font-style: italic !important; */
+  font-weight: bold !important;
+}
