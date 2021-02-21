@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import {  fetchUsers } from "./../../redux/reducers/usersreducer/actions";
 import DeleteModalWindow from "./../DeleteModalWindow";
 import EditModalWindow from "./../EditModalWindow";
+import CreateModalWindow from "./../CreateModalWindow";
+import NavBar from "./../NavBar";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -50,6 +52,8 @@ function UserTable(props) {
   const [isEdit, setIsEdit] = React.useState(false);
   const [editUser, setEditUser] = React.useState(null);
 
+  const [isCreate, setIsCreate] = React.useState(false);
+
   const classes = useStyles();
   
   useEffect(() => {
@@ -74,9 +78,17 @@ function UserTable(props) {
     setIsDelete(false);
   }
 
+  const createClickHandler = () => {
+    setIsCreate(true);
+  }
+  const cancelCreate = () => {
+    setIsCreate(false);
+  }
+
 
   return (
     <Container maxWidth="xl">
+      <NavBar openCreateWindow={createClickHandler}/>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
@@ -119,19 +131,20 @@ function UserTable(props) {
       </TableContainer>
       <DeleteModalWindow userId={deleteUserId} open={isDelete} handleClose={cancelDelete} />
       <EditModalWindow editUser={editUser} open={isEdit} handleClose={cancelEdit} />
+      <CreateModalWindow open={isCreate} handleClose={cancelCreate} />
 
     </Container>
   );
 }
 
-function stateToProps(state) {
+const stateToProps = (state) => {
   const { users } = state;
   return {
     users,
   };
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsers: () => {
       dispatch(fetchUsers());

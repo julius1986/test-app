@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {useDispatch} from "react-redux";
-import {updateUser} from "../../redux/reducers/usersreducer/actions"
-import {cloneObj} from "../../utils/utils"
+import {addUser} from "../../redux/reducers/usersreducer/actions"
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -84,9 +83,8 @@ export default function FormDialog(props) {
   const updateCurrentUser = () => {
     const valid = validForm();
     if(!valid){return false;}
-    userFields.isDirty = true;
-    const newUser = {...cloneObj(props.editUser), ...userFields};
-    dispatch(updateUser(newUser));
+    const newUser = {...userFields};
+    dispatch(addUser(newUser));
     setUserFields(initialUserFields);
     handleClose();
   }
