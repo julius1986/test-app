@@ -1,6 +1,6 @@
-import React, { useEffect, Fragment } from "react";
-import { connect } from "react-redux";
-import {  fetchUsers } from "./../../redux/reducers/usersreducer/actions";
+import React, { useEffect, useState } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { fetchUsers } from "./../../redux/reducers/usersreducer/actions";
 import DeleteModalWindow from "./../DeleteModalWindow";
 import EditModalWindow from "./../EditModalWindow";
 import CreateModalWindow from "./../CreateModalWindow";
@@ -14,8 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import Container from '@material-ui/core/Container';
-
+import Container from "@material-ui/core/Container";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -41,54 +40,77 @@ const useStyles = makeStyles({
   },
 });
 
+export default function UserTable(props) {
+  const users = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  const rows = users;
 
-function UserTable(props) {
-  
-  const rows = props.users;
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteUserId, setdeleteUserId] = useState(null);
 
-  const [isDelete, setIsDelete] = React.useState(false);
-  const [deleteUserId, setdeleteUserId] = React.useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editUser, setEditUser] = useState(null);
 
-  const [isEdit, setIsEdit] = React.useState(false);
-  const [editUser, setEditUser] = React.useState(null);
+  const [isCreate, setIsCreate] = useState(false);
 
-  const [isCreate, setIsCreate] = React.useState(false);
+  const [inputSearchValue, setInputSearchValue] = useState("");
 
   const classes = useStyles();
-  
+
   useEffect(() => {
-    props.fetchUsers();
-  }, [])
+    dispatch(fetchUsers());
+  }, []);
 
   const editClickHandler = (user) => {
     setEditUser(user);
     setIsEdit(true);
-  }
+  };
   const cancelEdit = () => {
     setEditUser(null);
     setIsEdit(false);
-  }
+  };
 
   const deleteClickHandler = (id) => {
     setdeleteUserId(id);
     setIsDelete(true);
-  }
+  };
   const cancelDelete = () => {
     setdeleteUserId(null);
     setIsDelete(false);
-  }
+  };
 
   const createClickHandler = () => {
     setIsCreate(true);
-  }
+  };
   const cancelCreate = () => {
     setIsCreate(false);
-  }
+  };
 
+  const inputSearchChange = (e) => {
+    setInputSearchValue(e.target.value);
+  };
+
+  const filterUsers = (users, value) => {
+    return users.filter((user) => {
+      if (
+        String(user.name).includes(value) ||
+        String(user.email).includes(value) ||
+        String(user.website).includes(value) ||
+        String(user.company.name).includes(value)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  };
 
   return (
     <Container maxWidth="xl">
-      <NavBar openCreateWindow={createClickHandler}/>
+      <NavBar
+        openCreateWindow={createClickHandler}
+        inputChange={inputSearchChange}
+      />
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
@@ -102,10 +124,8 @@ function UserTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow
-                key={row.id}
-              >
+            {filterUsers(rows, inputSearchValue).map((row) => (
+              <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
@@ -115,12 +135,20 @@ function UserTable(props) {
                   {row.company.name}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button onClick={editClickHandler.bind(this, row)} variant="contained" color="primary">
+                  <Button
+                    onClick={editClickHandler.bind(this, row)}
+                    variant="contained"
+                    color="primary"
+                  >
                     Update
                   </Button>
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button onClick={deleteClickHandler.bind(this, row.id)}  variant="contained" color="secondary">
+                  <Button
+                    onClick={deleteClickHandler.bind(this, row.id)}
+                    variant="contained"
+                    color="secondary"
+                  >
                     Delete
                   </Button>
                 </StyledTableCell>
@@ -129,27 +157,34 @@ function UserTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <DeleteModalWindow userId={deleteUserId} open={isDelete} handleClose={cancelDelete} />
-      <EditModalWindow editUser={editUser} open={isEdit} handleClose={cancelEdit} />
+      <DeleteModalWindow
+        userId={deleteUserId}
+        open={isDelete}
+        handleClose={cancelDelete}
+      />
+      <EditModalWindow
+        editUser={editUser}
+        open={isEdit}
+        handleClose={cancelEdit}
+      />
       <CreateModalWindow open={isCreate} handleClose={cancelCreate} />
-
     </Container>
   );
 }
 
-const stateToProps = (state) => {
-  const { users } = state;
-  return {
-    users,
-  };
-}
+// const stateToProps = (state) => {
+//   const { users } = state;
+//   return {
+//     users,
+//   };
+// }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUsers: () => {
-      dispatch(fetchUsers());
-    }
-  };
-}
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     fetchUsers: () => {
+//       dispatch(fetchUsers());
+//     }
+//   };
+// }
 
-export default connect(stateToProps, mapDispatchToProps)(UserTable);
+// export default connect(stateToProps, mapDispatchToProps)(UserTable);

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {addUser} from "../../redux/reducers/usersreducer/actions"
+import {randomId} from "./../../utils/utils";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -80,10 +81,11 @@ export default function FormDialog(props) {
     handleClose()
   }
   
-  const updateCurrentUser = () => {
+  const createCurrentUser = () => {
     const valid = validForm();
     if(!valid){return false;}
-    const newUser = {...userFields};
+    const id = randomId();
+    const newUser = {...userFields, id};
     dispatch(addUser(newUser));
     setUserFields(initialUserFields);
     handleClose();
@@ -148,7 +150,7 @@ export default function FormDialog(props) {
         <Button onClick={cancelClick} variant="contained">
           Cancel
         </Button>
-        <Button onClick={updateCurrentUser} variant="contained" color="primary">
+        <Button onClick={createCurrentUser} variant="contained" color="primary">
           Update
         </Button>
       </DialogActions>
