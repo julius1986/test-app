@@ -4,12 +4,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import SaveIcon from "@material-ui/icons/Save";
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
-import { Block } from "@material-ui/icons";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,81 +18,78 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  createButton:{
-    backgroundColor: '#4caf50',
-    borderColor: '#0063cc',
-    '&:hover': {
-        backgroundColor: '#388e3c',
-      },
-  },    
+  createButton: {
+    backgroundColor: "#4caf50",
+    borderColor: "#0063cc",
+    "&:hover": {
+      backgroundColor: "#388e3c",
+    },
+  },
   search: {
-    display:"inline-block",
-    position: 'relative',
+    display: "inline-block",
+    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
+    "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     // width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
+      width: "auto",
     },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputRoot: {
-    color: 'inherit',
+    color: "inherit",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
     },
   },
 }));
 
 export default function ButtonAppBar(props) {
   const classes = useStyles();
-  const {openCreateWindow, inputChange} = props;
+  const { openCreateWindow, inputChange } = props;
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-
           <Typography variant="h6" className={classes.title}>
             Search
-
             <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                onChange={inputChange}
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
             </div>
-            <InputBase onChange={inputChange}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-
-              
-          </Typography> 
+          </Typography>
           <Button
             onClick={openCreateWindow}
             className={classes.createButton}

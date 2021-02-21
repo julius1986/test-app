@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "./../../redux/reducers/usersreducer/actions";
 import DeleteModalWindow from "./../DeleteModalWindow";
 import EditModalWindow from "./../EditModalWindow";
@@ -171,20 +171,3 @@ export default function UserTable(props) {
     </Container>
   );
 }
-
-// const stateToProps = (state) => {
-//   const { users } = state;
-//   return {
-//     users,
-//   };
-// }
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     fetchUsers: () => {
-//       dispatch(fetchUsers());
-//     }
-//   };
-// }
-
-// export default connect(stateToProps, mapDispatchToProps)(UserTable);

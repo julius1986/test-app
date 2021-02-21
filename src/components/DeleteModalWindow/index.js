@@ -12,10 +12,10 @@ export default function FormDialog(props) {
   const { open, handleClose } = props;
   const { userId } = props;
   const dispatch = useDispatch();
-  function deleteUser() {
+  const deleteUser = () => {
     dispatch(deleteUserById(userId));
     handleClose();
-  }
+  };
 
   return (
     <Dialog
