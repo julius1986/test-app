@@ -1,6 +1,8 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import {  fetchUsers } from "./../../redux/reducers/usersreducer/actions";
+import DeleteModalWindow from "./../DeleteModalWindow";
+import EditModalWindow from "./../EditModalWindow";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,7 +11,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import ModalWindow from "./../ModalWindow";
+import Button from "@material-ui/core/Button";
+import Container from '@material-ui/core/Container';
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -35,33 +39,44 @@ const useStyles = makeStyles({
   },
 });
 
+
 function UserTable(props) {
+  
+  const rows = props.users;
+
+  const [isDelete, setIsDelete] = React.useState(false);
+  const [deleteUserId, setdeleteUserId] = React.useState(null);
+
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [editUser, setEditUser] = React.useState(null);
+
+  const classes = useStyles();
   
   useEffect(() => {
     props.fetchUsers();
   }, [])
 
-  const rows = props.users;
-  const [open, setOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState({});
-
-  function clickHandler(user) {
-    setCurrentUser(user);
-    handleClickOpen();
+  const editClickHandler = (user) => {
+    setEditUser(user);
+    setIsEdit(true);
+  }
+  const cancelEdit = () => {
+    setEditUser(null);
+    setIsEdit(false);
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const deleteClickHandler = (id) => {
+    setdeleteUserId(id);
+    setIsDelete(true);
+  }
+  const cancelDelete = () => {
+    setdeleteUserId(null);
+    setIsDelete(false);
+  }
 
-  const handleClose = () => {
-    setCurrentUser({});
-    setOpen(false);
-  };
 
-  const classes = useStyles();
   return (
-    <Fragment>
+    <Container maxWidth="xl">
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
@@ -70,12 +85,13 @@ function UserTable(props) {
               <StyledTableCell align="right">Email</StyledTableCell>
               <StyledTableCell align="right">Website</StyledTableCell>
               <StyledTableCell align="right">Company</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <StyledTableRow
-                onClick={clickHandler.bind(this, row)}
                 key={row.id}
               >
                 <StyledTableCell component="th" scope="row">
@@ -86,13 +102,25 @@ function UserTable(props) {
                 <StyledTableCell align="right">
                   {row.company.name}
                 </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button onClick={editClickHandler.bind(this, row)} variant="contained" color="primary">
+                    Update
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button onClick={deleteClickHandler.bind(this, row.id)}  variant="contained" color="secondary">
+                    Delete
+                  </Button>
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {(open&&<ModalWindow user={currentUser} open={open} handleClose={handleClose} />)}
-    </Fragment>
+      <DeleteModalWindow userId={deleteUserId} open={isDelete} handleClose={cancelDelete} />
+      <EditModalWindow editUser={editUser} open={isEdit} handleClose={cancelEdit} />
+
+    </Container>
   );
 }
 

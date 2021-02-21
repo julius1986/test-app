@@ -8,7 +8,7 @@ export default function UsersReducer(state=initialState, action){
             return [...state, action.payload]
             break;
         case constatns.FETCH_USERS:
-            return state = [...action.payload]
+            return [...action.payload]
             break;
         case constatns.DELETE_USER:
             return state.filter(el => el.id!==action.payload)
@@ -18,8 +18,7 @@ export default function UsersReducer(state=initialState, action){
             if(index===-1){
                 return state;
             }
-            state.splice(index, 1)
-            state.push(action.payload)
+            state[index] = action.payload
             return [...state]
             break;
         case constatns.ADD_USERS:
