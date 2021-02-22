@@ -68,10 +68,13 @@ export default function UserTable(props) {
 
   useEffect(() => {
     setRows(filterUsers(users, inputSearchValue));
-  }, [users.length, inputSearchValue, isEdit]);
+  }, [users.length, inputSearchValue, isEdit, isCreate]);
+  useEffect(() => {
+    setPage(0);
+  }, [inputSearchValue]);
 
   const calcPageAfterDelete = () => {
-    if (rows.length > 0 && rows.length <= page * rowsPerPage + 1) {
+    if (rows.length > 1 && rows.length <= page * rowsPerPage + 1) {
       setPage(page - 1);
     }
   };
