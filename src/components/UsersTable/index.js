@@ -15,6 +15,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
+import TablePagination from '@material-ui/core/TablePagination';
+
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -43,7 +45,7 @@ const useStyles = makeStyles({
 export default function UserTable(props) {
   const users = useSelector((state) => state.users);
   const dispatch = useDispatch();
-  const rows = users;
+  // const rows = users;
 
   const [isDelete, setIsDelete] = useState(false);
   const [deleteUserId, setdeleteUserId] = useState(null);
@@ -55,11 +57,27 @@ export default function UserTable(props) {
 
   const [inputSearchValue, setInputSearchValue] = useState("");
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = React.useState([]);
+  
   const classes = useStyles();
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
+
+  useEffect(() => {
+    setRows(filterUsers(users, inputSearchValue))
+  }, [users.length, inputSearchValue, editUser])
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const editClickHandler = (user) => {
     setEditUser(user);
@@ -124,7 +142,9 @@ export default function UserTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterUsers(rows, inputSearchValue).map((row) => (
+            {rows
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row) => (
               <StyledTableRow key={row.id} className={row.isDirty&&"dirty"}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
@@ -168,6 +188,15 @@ export default function UserTable(props) {
         handleClose={cancelEdit}
       />
       <CreateModalWindow open={isCreate} handleClose={cancelCreate} />
+      <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
     </Container>
   );
 }
