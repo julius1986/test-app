@@ -9,11 +9,12 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 export default function FormDialog(props) {
-  const { open, handleClose } = props;
+  const { open, handleClose, calcPage } = props;
   const { userId } = props;
   const dispatch = useDispatch();
   const deleteUser = () => {
     dispatch(deleteUserById(userId));
+    calcPage();
     handleClose();
   };
 

@@ -15,8 +15,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
-import TablePagination from '@material-ui/core/TablePagination';
-
+import TablePagination from "@material-ui/core/TablePagination";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -60,7 +59,7 @@ export default function UserTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState([]);
-  
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -68,8 +67,14 @@ export default function UserTable(props) {
   }, []);
 
   useEffect(() => {
-    setRows(filterUsers(users, inputSearchValue))
-  }, [users.length, inputSearchValue, editUser])
+    setRows(filterUsers(users, inputSearchValue));
+  }, [users.length, inputSearchValue, isEdit]);
+
+  const calcPageAfterDelete = () => {
+    if (rows.length > 0 && rows.length <= page * rowsPerPage + 1) {
+      setPage(page - 1);
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -143,43 +148,44 @@ export default function UserTable(props) {
           </TableHead>
           <TableBody>
             {rows
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row) => (
-              <StyledTableRow key={row.id} className={row.isDirty&&"dirty"}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.email}</StyledTableCell>
-                <StyledTableCell align="right">{row.website}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {row.company.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    onClick={editClickHandler.bind(this, row)}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update
-                  </Button>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    onClick={deleteClickHandler.bind(this, row.id)}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Delete
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <StyledTableRow key={row.id} className={row.isDirty && "dirty"}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.email}</StyledTableCell>
+                  <StyledTableCell align="right">{row.website}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {row.company.name}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Button
+                      onClick={editClickHandler.bind(this, row)}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Update
+                    </Button>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Button
+                      onClick={deleteClickHandler.bind(this, row.id)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Delete
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
       <DeleteModalWindow
         userId={deleteUserId}
         open={isDelete}
+        calcPage={calcPageAfterDelete}
         handleClose={cancelDelete}
       />
       <EditModalWindow
@@ -189,14 +195,14 @@ export default function UserTable(props) {
       />
       <CreateModalWindow open={isCreate} handleClose={cancelCreate} />
       <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
     </Container>
   );
 }
