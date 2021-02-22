@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/reducers/usersreducer/actions";
 import { cloneObj } from "../../utils/utils";
@@ -30,7 +30,9 @@ export default function FormDialog(props) {
   const [errorMessages, setErrorMessages] = useState({
     ...initialErrorMessages,
   });
-
+  useEffect(() => {
+    setUserFields(props.editUser)
+  }, [props.editUser])
   const [userFields, setUserFields] = useState({ ...initialUserFields });
 
   const nameHandler = (e) => {
@@ -76,7 +78,6 @@ export default function FormDialog(props) {
 
   const cancelClick = () => {
     setErrorMessages({ ...initialErrorMessages });
-    setUserFields({ ...initialUserFields });
     handleClose();
   };
 
@@ -86,9 +87,7 @@ export default function FormDialog(props) {
       return false;
     }
     userFields.isDirty = true;
-    const newUser = { ...cloneObj(props.editUser), ...userFields };
-    dispatch(updateUser(newUser));
-    setUserFields(initialUserFields);
+    dispatch(updateUser(userFields));
     handleClose();
   };
 
@@ -142,7 +141,7 @@ export default function FormDialog(props) {
             name="companyName"
             label="Company"
             type="text"
-            value={userFields.companyName}
+            value={userFields.company.name}
             onChange={companyHandler}
             fullWidth
           />
